@@ -1,0 +1,61 @@
+.model-section {
+  display: block;
+}
+
+.model-image {
+  position: relative;
+  margin: 16px auto;
+  height: 30em;
+  width: -moz-fit-content;
+  width: fit-content;
+  overflow: hidden;
+}
+
+.model-image img {
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+.model-image .glass-image {
+  position: absolute;
+  display: block;
+  z-index: 10;
+  top: 117px;
+  height: 15%;
+  opacity: 0.65;
+}
+
+.model-image .glass-detail {
+  position: absolute;
+  display: block;
+  width: 100%;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  right: 0;
+  height: 30%;
+  background-color: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.model-image .glass-detail div {
+  padding: 8px;
+}
+
+.glass-detail h4 {
+  margin: 0;
+  color: #fff;
+}
+
+.glass-detail p {
+  margin: 8px 0;
+  font-size: 18px;
+}
+
+.glass-detail span {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(161, 205, 153);
+}
