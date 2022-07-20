@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ShoesStore from './Components/ShoesStore';
+import ProductList from './Components/ProductList';
+import Modal from './Components/Modal';
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isModalOpen: false,
+      detailItem: null,
+    };
+  }
+
+  modalHandler = () => {
+    this.setState((prevState) => ({ isModalOpen: !prevState.isModalOpen }));
+  };
+
+  showDetailHandler = (item) => {
+    this.modalHandler();
+    this.setState({ detailItem: item });
+  };
+
+  render() {
+    console.log(this.state);
+    return (
+      <ShoesStore>
+        <ProductList onShowDetail={this.showDetailHandler} />
+        {this.state.isModalOpen && (
+          <Modal
+            onCloseModal={this.modalHandler}
+            content={this.state.detailItem}
+          />
+        )}
+      </ShoesStore>
+    );
+  }
 }
 
 export default App;
