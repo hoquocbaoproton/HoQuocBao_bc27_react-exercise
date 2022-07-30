@@ -12,11 +12,14 @@ import {
   ScrollArea,
   useMantineTheme,
   Center,
-  Transition,
+  Title,
 } from '@mantine/core';
 import { delApiUser } from '../../services/delApiUser';
 
 import './UserTable.css';
+
+// Transition
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const roleColor = (role) => {
   switch (role) {
@@ -61,60 +64,64 @@ const UsersTable = ({ users, onSuccess, onFetchUser }) => {
 
   const rows = users?.map((user) => {
     return (
-      <tr key={user.id} className={`${exit ? 'hide' : 'show'}`}>
-        <td>
-          <Group spacing='sm'>
-            <Text size='sm' weight={500}>
-              {user.name}
-            </Text>
-          </Group>
-        </td>
-
-        <td>
-          <Badge
-            color={roleColor(user.role)}
-            variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
-          >
-            {user.role}
-          </Badge>
-        </td>
-        <td>
-          <Anchor
-            size='sm'
-            href='#'
-            onClick={(event) => event.preventDefault()}
-          >
-            {user.email}
-          </Anchor>
-        </td>
-        <td>
-          <Text size='sm' color='dimmed'>
-            {user.account}
-          </Text>
-        </td>
-        <td>
-          <Text size='sm' color='dimmed'>
-            {user.password}
-          </Text>
-        </td>
-        <td>
-          <Text size='sm' color='dimmed'>
-            {user.phone}
-          </Text>
-        </td>
-        <td>
-          <Center>
-            <Group spacing={0}>
-              <ActionIcon onClick={selectUserHandler} id={user.id}>
-                <FontAwesomeIcon icon={faPen} />
-              </ActionIcon>
-              <ActionIcon color='red' onClick={deleteUserHandler} id={user.id}>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </ActionIcon>
+      <CSSTransition key={user.id} classNames='fade' timeout={200}>
+        <tr>
+          <td>
+            <Group spacing='sm'>
+              <Text size='sm' weight={500}>
+                {user.name}
+              </Text>
             </Group>
-          </Center>
-        </td>
-      </tr>
+          </td>
+
+          <td>
+            <Badge
+              color={roleColor(user.role)}
+              variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+            >
+              {user.role}
+            </Badge>
+          </td>
+          <td>
+            <Anchor
+              size='sm'
+              href='#'
+              onClick={(event) => event.preventDefault()}
+            >
+              {user.email}
+            </Anchor>
+          </td>
+          <td>
+            <Title order={6}> {user.account}</Title>
+          </td>
+          <td>
+            <Text size='sm' color='dimmed'>
+              {user.password}
+            </Text>
+          </td>
+          <td>
+            <Text size='sm' color='dimmed'>
+              {user.phone}
+            </Text>
+          </td>
+          <td>
+            <Center>
+              <Group spacing={0}>
+                <ActionIcon onClick={selectUserHandler} id={user.id}>
+                  <FontAwesomeIcon icon={faPen} />
+                </ActionIcon>
+                <ActionIcon
+                  color='red'
+                  onClick={deleteUserHandler}
+                  id={user.id}
+                >
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </ActionIcon>
+              </Group>
+            </Center>
+          </td>
+        </tr>
+      </CSSTransition>
     );
   });
 
@@ -141,7 +148,7 @@ const UsersTable = ({ users, onSuccess, onFetchUser }) => {
               <th />
             </tr>
           </thead>
-          <tbody>{rows}</tbody>
+          <TransitionGroup component='tbody'>{rows}</TransitionGroup>
         </Table>
       </ScrollArea>
     </section>
