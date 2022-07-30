@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,7 +16,7 @@ import {
 } from '@mantine/core';
 import { delApiUser } from '../../services/delApiUser';
 
-import './UserTable.css';
+import './UserTableFade.css';
 
 // Transition
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -33,7 +33,6 @@ const roleColor = (role) => {
 };
 
 const UsersTable = ({ users, onSuccess, onFetchUser }) => {
-  const [exit, setExit] = useState(false);
   const theme = useMantineTheme();
 
   const selectUserHandler = useCallback(
@@ -53,7 +52,6 @@ const UsersTable = ({ users, onSuccess, onFetchUser }) => {
 
         await delApiUser(id).then(() => {
           onSuccess();
-          setExit(true);
         });
       } catch (error) {
         console.log(error);

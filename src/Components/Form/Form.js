@@ -123,6 +123,8 @@ const Form = ({ onSuccess, onSelectUser }) => {
 
   const loadingProp = { loading: isLoading && true };
 
+  console.log(error);
+
   return (
     <section>
       <h2>Register User Form</h2>
