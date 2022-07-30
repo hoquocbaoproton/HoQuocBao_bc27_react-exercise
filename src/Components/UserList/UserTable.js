@@ -1,3 +1,5 @@
+import React, { useEffect, useCallback, useState } from 'react';
+
 import { faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,21 +12,25 @@ import {
   ScrollArea,
   useMantineTheme,
   Center,
+  Transition,
 } from '@mantine/core';
-import { useCallback } from 'react';
 import { delApiUser } from '../../services/delApiUser';
 
-// interUsersTableProps =  {
-//   data: { avatar: string; name: string; job: string; email: string; phone: string }[];
-// }
+import './UserTable.css';
 
-// const jobColors: Record<string, string> = {
-//   engineer: 'blue',
-//   manager: 'cyan',
-//   designer: 'pink',
-// };
+const roleColor = (role) => {
+  switch (role) {
+    case 'customer':
+      return 'cyan';
+    case 'administrator':
+      return 'pink';
+    default:
+      break;
+  }
+};
 
 const UsersTable = ({ users, onSuccess, onFetchUser }) => {
+  const [exit, setExit] = useState(false);
   const theme = useMantineTheme();
 
   const selectUserHandler = useCallback(
@@ -44,6 +50,7 @@ const UsersTable = ({ users, onSuccess, onFetchUser }) => {
 
         await delApiUser(id).then(() => {
           onSuccess();
+          setExit(true);
         });
       } catch (error) {
         console.log(error);
@@ -52,9 +59,9 @@ const UsersTable = ({ users, onSuccess, onFetchUser }) => {
     [onSuccess]
   );
 
-  const rows = users.map((user) => {
+  const rows = users?.map((user) => {
     return (
-      <tr key={user.id}>
+      <tr key={user.id} className={`${exit ? 'hide' : 'show'}`}>
         <td>
           <Group spacing='sm'>
             <Text size='sm' weight={500}>
@@ -64,7 +71,10 @@ const UsersTable = ({ users, onSuccess, onFetchUser }) => {
         </td>
 
         <td>
-          <Badge variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}>
+          <Badge
+            color={roleColor(user.role)}
+            variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+          >
             {user.role}
           </Badge>
         </td>

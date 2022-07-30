@@ -11,6 +11,7 @@ import { getApiUser } from '../services/getApiUser';
 import { URL } from '../store/URL';
 
 const UserManagement = () => {
+  const [change, setChange] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState();
 
@@ -18,7 +19,6 @@ const UserManagement = () => {
     try {
       const user = await getApiUser(`${URL}/${id}`);
       setSelectedUser(user);
-      console.log(user);
     } catch (error) {
       console.log(error);
     }

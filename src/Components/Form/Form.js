@@ -22,7 +22,7 @@ import { postApiUser } from '../../services/postApiUser';
 import { putApiUser } from '../../services/putApiUser';
 
 const Form = ({ onSuccess, onSelectUser }) => {
-  const [submitType, setSubmitType] = useState('add');
+  const [submitType, setSubmitType] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -49,7 +49,8 @@ const Form = ({ onSuccess, onSelectUser }) => {
       event.preventDefault();
       const user = newUser();
 
-      if (submitType === 'add') {
+      if (submitType === 'REGISTER') {
+        setIsLoading(true);
         await postApiUser(user)
           .then(() => {
             setIsLoading(false);
@@ -64,10 +65,12 @@ const Form = ({ onSuccess, onSelectUser }) => {
           })
           .then(() => {
             onSuccess();
+            setIsLoading(false);
           });
       }
 
-      if (submitType === 'update') {
+      if (submitType === 'UPDATE') {
+        setIsLoading(true);
         await putApiUser(user, onSelectUser.id)
           .then(() => {
             resetForm(
@@ -81,7 +84,8 @@ const Form = ({ onSuccess, onSelectUser }) => {
           })
           .then(() => {
             onSuccess();
-            setSubmitType('add');
+            setIsLoading(false);
+            setSubmitType('REGISTER');
           });
       }
     } catch (error) {
@@ -111,8 +115,13 @@ const Form = ({ onSuccess, onSelectUser }) => {
 
   useEffect(() => {
     fillFormHandler();
-    setSubmitType('update');
-  }, [fillFormHandler]);
+
+    setSubmitType(() => {
+      return onSelectUser ? 'UPDATE' : 'REGISTER';
+    });
+  }, [fillFormHandler, onSelectUser]);
+
+  const loadingProp = { loading: isLoading && true };
 
   return (
     <section>
@@ -169,7 +178,13 @@ const Form = ({ onSuccess, onSelectUser }) => {
         </Input>
         <Space h='xl' />
         <Group position='right'>
-          <Button radius='md' size='md' uppercase type='submit'>
+          <Button
+            radius='md'
+            size='md'
+            uppercase
+            type='submit'
+            {...loadingProp}
+          >
             {submitType}
           </Button>
         </Group>
